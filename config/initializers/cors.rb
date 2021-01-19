@@ -26,7 +26,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
 
   #本番環境用のオリジン設定
   allow do
-      origins 'https:<自身が設定するアプリのURL>'
+      origins 'https://vigilant-jones-9c8528.netlify.app'
 
       resource '*',
           headers: :any,
