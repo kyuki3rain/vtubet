@@ -23,4 +23,9 @@ class SessionsController < ApplicationController
         render json: { logged_in: false, message: 'ユーザーが存在しません' }
     end
   end
+
+  def test
+    session[:user_id] = 1
+    render json: {}
+  end
 end

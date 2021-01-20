@@ -5,4 +5,6 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#login'
   delete '/logout', to: 'sessions#logout'
   get '/logged_in', to: 'sessions#logged_in?'
+  get '/test', to: 'sessions#test'
+  post '/test', to: 'sessions#test'
 end
