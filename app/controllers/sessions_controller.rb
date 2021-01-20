@@ -27,7 +27,7 @@ class SessionsController < ApplicationController
 
   def test
     session[:user_id] = 1
-    render json: {}
     binding.pry
+    render json: {}
   end
 end

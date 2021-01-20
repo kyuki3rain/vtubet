@@ -42,9 +42,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'bcrypt'
 
-gem 'rack', '>= 2.1.2'
 gem 'rack-cors'
-gem 'rails_same_site_cookie'
 
 gem 'pry'
 gem 'pry-doc'
