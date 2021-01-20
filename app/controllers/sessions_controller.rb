@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  require "pry"
   def login
     @user = User.find_by(email: params[:email])
     if @user&.authenticate(params[:password])
@@ -27,5 +28,6 @@ class SessionsController < ApplicationController
   def test
     session[:user_id] = 1
     render json: {}
+    binding.pry
   end
 end
