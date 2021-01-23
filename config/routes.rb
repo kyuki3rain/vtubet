@@ -7,4 +7,12 @@ Rails.application.routes.draw do
   get '/logged_in', to: 'sessions#logged_in?'
   get '/test', to: 'sessions#test'
   post '/test', to: 'sessions#test'
+
+  resources :contests, only: %i[index show]
+  resources :bets, only: %i[index destroy] do
+    get :publish, on: :member
+  end
+  resources :chances, only: [] do
+    resources :bets, only: %i[create]
+  end
 end
