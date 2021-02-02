@@ -10,12 +10,12 @@ class BetsController < ApplicationController
         chance: {
           rate: bet.chance.rate,
           bet_type: bet.chance.bet_type,
-          member: {
-            name: bet.chance.participation.member.name
-          },
+          member_names: bet.chance.participations.map do |participation|
+            participation.member.name
+          end,
           contest: {
-            id: bet.chance.participation.contest.id,
-            title: bet.chance.participation.contest.title
+            id: bet.chance.participations.first.contest.id,
+            title: bet.chance.participations.first.contest.title
           }
         }
       }

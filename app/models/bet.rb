@@ -6,5 +6,6 @@ class Bet < ApplicationRecord
 
   def publish!
     unpaid!
+    chance.calc!
   end
 end

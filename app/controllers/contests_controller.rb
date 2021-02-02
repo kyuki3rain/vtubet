@@ -18,24 +18,21 @@ class ContestsController < ApplicationController
   def show
     @contest = Contest.find(params[:id])
 
-    @contest.chances.each do |chance|
-      chance.calc!
-    end
-
     data = {
       title: @contest.title,
-      members: @contest.participations.map do |participation|
-        {
-          name: participation.member.name,
-          chances: participation.chances.map do |chance|
-            {
-              id: chance.id,
-              bet_type: chance.bet_type,
-              rate: chance.rate,
-              is_bet: !chance.bets.find_by(user: current_user).nil?
-            }
-          end
-        }
+      members: @contest.members.pluck(:name),
+      chances: Chance.bet_types.keys.index_with do |k|
+        @contest.chances.where(bet_type: k)
+                .includes({participations: :member}).map do |chance|
+          {
+            id: chance.id,
+            rate: chance.rate,
+            member_names: chance.participations.map do |participation|
+              participation.member.name
+            end,
+            is_bet: current_user && !chance.bets.find_by(user_id: current_user.id).nil?
+          }
+        end
       end
     }
 

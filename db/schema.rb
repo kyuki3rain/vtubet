@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_21_015435) do
+ActiveRecord::Schema.define(version: 2021_01_31_062050) do
 
   create_table "bets", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -23,14 +23,21 @@ ActiveRecord::Schema.define(version: 2021_01_21_015435) do
     t.index ["user_id", "chance_id"], name: "index_bets_on_user_id_and_chance_id", unique: true
   end
 
-  create_table "chances", force: :cascade do |t|
+  create_table "chance_participations", force: :cascade do |t|
+    t.integer "chance_id", null: false
     t.integer "participation_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["chance_id", "participation_id"], name: "index_chance_participations_on_chance_id_and_participation_id", unique: true
+    t.index ["participation_id"], name: "index_chance_participations_on_participation_id"
+  end
+
+  create_table "chances", force: :cascade do |t|
     t.integer "bet_type"
-    t.integer "rate"
+    t.integer "rate", default: 1
     t.integer "status", default: 0, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["participation_id"], name: "index_chances_on_participation_id"
   end
 
   create_table "contests", force: :cascade do |t|
@@ -73,7 +80,8 @@ ActiveRecord::Schema.define(version: 2021_01_21_015435) do
 
   add_foreign_key "bets", "chances"
   add_foreign_key "bets", "users"
-  add_foreign_key "chances", "participations"
+  add_foreign_key "chance_participations", "chances"
+  add_foreign_key "chance_participations", "participations"
   add_foreign_key "contests", "users"
   add_foreign_key "participations", "contests"
   add_foreign_key "participations", "members"
