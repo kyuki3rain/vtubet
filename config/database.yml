@@ -21,3 +21,4 @@ production:
 　password: <%= ENV['CONOHA_DB_PASSWORD'] %>
 　host: <%= ENV['CONOHA_DB_HOSTNAME'] %>
 　port: <%= ENV['CONOHA_DB_PORT'] %>
+  url: <%= ENV['DATABASE_URL'] %>
