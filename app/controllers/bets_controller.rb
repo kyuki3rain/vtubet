@@ -10,8 +10,8 @@ class BetsController < ApplicationController
         chance: {
           rate: bet.chance.rate,
           bet_type: bet.chance.bet_type,
-          member_names: bet.chance.participations.map do |participation|
-            participation.member.name
+          member_names: bet.chance.chance_participations.order(:position).map do |chance_participation|
+            chance_participation.participation.member.name
           end,
           contest: {
             id: bet.chance.participations.first.contest.id,
