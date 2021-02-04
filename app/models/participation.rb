@@ -8,33 +8,56 @@ class Participation < ApplicationRecord
   after_create :set_chance
 
   def set_chance
-    with_lock do
-      chances.create!(bet_type: :win)
-      chances.create!(bet_type: :place)
+    chance = Chance.new(bet_type: :win)
+    chance.chance_participations.build(participation_id: id)
+    chance.save!
 
-      pids = contest.participations.pluck(:id)
+    chance = Chance.new(bet_type: :place)
+    chance.chance_participations.build(participation_id: id)
+    chance.save!
+
+    participation_ids = contest.participations.pluck(:id)
+    
+    double_positions = [0, 1].permutation(2).to_a
+    triple_positions = [0, 1, 2].permutation(3).to_a
+
+    participation_ids.each do |p|
+      next if p == id
       
-      pids.each do |p|
-        next if p == id
+      double_positions.each do |double_position|
+        chance = Chance.new(bet_type: :exacta)
+        chance.chance_participations.build(participation_id: id, position: double_position[0])
+        chance.chance_participations.build(participation_id: p, position: double_position[1])
+        chance.save!
+      end
+      
+      chance = Chance.new(bet_type: :quinella)
+      chance.chance_participations.build(participation_id: id)
+      chance.chance_participations.build(participation_id: p)
+      chance.save!
+      
+      chance = Chance.new(bet_type: :quinella_place)
+      chance.chance_participations.build(participation_id: id)
+      chance.chance_participations.build(participation_id: p)
+      chance.save!
 
-        chance = chances.create!(bet_type: :exacta)
-        chance.chance_participations.create!(participation_id: p)
-        chance = chances.create!(bet_type: :quinella)
-        chance.chance_participations.create!(participation_id: p)
-        chance = chances.create!(bet_type: :quinella_place)
-        chance.chance_participations.create!(participation_id: p)
-        
-        pids.each do |q|
-          next if q == id
-          next if p == q
+      participation_ids.each do |q|
+        next if q == id
+        next if p == q
 
-          chance = chances.create!(bet_type: :tierce)
-          chance.chance_participations.create!(participation_id: p)
-          chance.chance_participations.create!(participation_id: q)
-          chance = chances.create!(bet_type: :trio)
-          chance.chance_participations.create!(participation_id: p)
-          chance.chance_participations.create!(participation_id: q)
+        triple_positions.each do |triple_position|
+          chance = Chance.new(bet_type: :tierce)
+          chance.chance_participations.build(participation_id: id, position: triple_position[0])
+          chance.chance_participations.build(participation_id: p, position: triple_position[1])
+          chance.chance_participations.build(participation_id: q, position: triple_position[2])
+          chance.save!
         end
+
+        chance = Chance.new(bet_type: :trio)
+        chance.chance_participations.build(participation_id: id)
+        chance.chance_participations.build(participation_id: p)
+        chance.chance_participations.build(participation_id: q)
+        chance.save!
       end
     end
   end

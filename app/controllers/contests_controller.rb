@@ -20,22 +20,23 @@ class ContestsController < ApplicationController
 
     data = {
       title: @contest.title,
-      members: @contest.members.pluck(:name),
-      chances: Chance.bet_types.keys.index_with do |k|
-        @contest.chances.where(bet_type: k)
-                .includes({participations: :member}).map do |chance|
-          {
-            id: chance.id,
-            rate: chance.rate,
-            member_names: chance.participations.map do |participation|
-              participation.member.name
-            end,
-            is_bet: current_user && !chance.bets.find_by(user_id: current_user.id).nil?
-          }
-        end
-      end
+      member_names: @contest.members.pluck(:name)
     }
 
     render json: data
+  end
+
+  private
+
+  def chance_data(chance)
+    {
+      id: chance.id,
+      rate: chance.rate,
+      member_names: chance.chance_participations.order(:position).map do |chance_participation|
+        chance_participation.participation.member.name
+      end,
+      is_bet: current_user && !chance.bets.find_by(user_id: current_user.id).nil?,
+      has_order: chance.exacta? || chance.tierce?
+    }
   end
 end

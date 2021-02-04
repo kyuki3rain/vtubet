@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_31_062050) do
+ActiveRecord::Schema.define(version: 2021_02_04_093929) do
 
   create_table "bets", charset: "utf8mb4", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2021_01_31_062050) do
     t.bigint "participation_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "position", default: 0, null: false
     t.index ["chance_id", "participation_id"], name: "index_chance_participations_on_chance_id_and_participation_id", unique: true
     t.index ["participation_id"], name: "index_chance_participations_on_participation_id"
   end

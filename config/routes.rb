@@ -8,7 +8,9 @@ Rails.application.routes.draw do
   get '/test', to: 'sessions#test'
   post '/test', to: 'sessions#test'
 
-  resources :contests, only: %i[index show]
+  resources :contests, only: %i[index show] do
+    resources :chances, only: :index
+  end
   resources :bets, only: %i[index destroy] do
     get :publish, on: :member
   end
