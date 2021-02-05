@@ -17,4 +17,6 @@ Rails.application.routes.draw do
   resources :chances, only: [] do
     resources :bets, only: %i[create]
   end
+
+  resource :user, only: %i[show]
 end

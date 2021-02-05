@@ -8,7 +8,6 @@ class Chance < ApplicationRecord
   # 左から順に、[単勝 複勝 馬単 馬連 ワイド 三連単 三連複]
 
   validate :participations_count
-  # validate :diff_position
 
   def calc!
     contest = participations.first.contest
