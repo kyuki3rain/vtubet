@@ -3,12 +3,12 @@ class ChancesController < ApplicationController
         @contest = Contest.find(params[:contest_id])
 
         if params[:bet_type]
-            data = @contest.chances.where(bet_type: params[:bet_type]).map do |chance|
+            data = @contest.chances.where(bet_type: params[:bet_type]).includes(:bets).map do |chance|
                        chance_data(chance)
                    end
         else
             data = Chance.bet_types.keys.index_with do |k|
-              @contest.chances.where(bet_type: k).map do |chance|
+              @contest.chances.where(bet_type: k).includes(:bets).map do |chance|
                 chance_data(chance)
               end
             end
@@ -23,7 +23,7 @@ class ChancesController < ApplicationController
       {
         id: chance.id,
         rate: chance.rate,
-        member_names: chance.chance_participations.order(:position).map do |chance_participation|
+        member_names: chance.chance_participations.order(:position).includes(participation: :member).map do |chance_participation|
           chance_participation.participation.member.name
         end,
         is_bet: current_user && !chance.bets.find_by(user_id: current_user.id).nil?,
