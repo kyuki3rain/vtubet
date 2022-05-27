@@ -34,7 +34,7 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
           credentials: true
   end
   allow do
-      origins 'https://vigilant-jones-9c8528.netlify.app'
+      origins 'https://vtubet-client.vercel.app/'
 
       resource '*',
           headers: :any,
