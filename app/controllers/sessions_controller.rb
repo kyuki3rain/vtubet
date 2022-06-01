@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
     @user = User.find_by(email: params[:email])
     if @user&.authenticate(params[:password])
       login!
-      payload = { logged_in: true }
+      payload = { logged_in: true, user: @user }
     else
       payload = { status: 401, errors: ['メールアドレスまたはパスワードが正しくありません。'] }
     end
